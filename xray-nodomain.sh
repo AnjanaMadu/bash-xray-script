@@ -26,6 +26,13 @@ cat << EOF > /usr/local/etc/xray/config.json
   "log": {
     "loglevel": "warning"
   },
+  "api": {
+    "services": [
+      "HandlerService",
+      "StatsService"
+    ],
+    "tag": "api"
+  },
   "dns": {
     "servers": [
       "1.1.1.1"
