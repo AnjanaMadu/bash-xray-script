@@ -26,15 +26,36 @@ cat << EOF > /usr/local/etc/xray/config.json
   "log": {
     "loglevel": "warning"
   },
+  "api": {
+    "services": [
+      "HandlerService",
+      "LoggerService",
+      "StatsService"
+    ],
+    "tag": "api"
+  },
   "dns": {
     "servers": [
       "1.1.1.1"
     ],
     "queryStrategy": "UseIPv4"
   },
+  "policy": {
+    "system": {
+      "statsInboundDownlink": true,
+      "statsInboundUplink": true
+    }
+  },
   "routing": {
     "domainStrategy": "IPIfNonMatch",
     "rules": [
+      {
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api",
+        "type": "field"
+      },
       {
         "type": "field",
         "ip": [
@@ -59,6 +80,15 @@ cat << EOF > /usr/local/etc/xray/config.json
     ]
   },
   "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 8080,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
+      },
+      "tag": "api"
+    },
     {
       "listen": "0.0.0.0",
       "port": 443,
@@ -177,6 +207,7 @@ cat << EOF > /usr/local/etc/xray/config.json
       "tag": "block"
     }
   ]
+  "stats": {}
 }
 EOF
 
